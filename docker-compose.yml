@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  php-apache-saypr:
+    container_name: php-apache-saypr
+    build: docker/php/local
+    restart: always
+    environment:
+      PHP_IDE_CONFIG: "serverName=saypr-laravel"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - postgres-saypr
+    ports:
+      - "8080:80"
+    volumes:
+      - ".:/var/www/html"
+    networks:
+      - saypr-network
+
+  postgres-saypr:
+    container_name: postgres-saypr
+    image: postgres:12
+    restart: always
+    ports:
+      - "54320:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=saypr
+      - TZ=GMT
+    volumes:
+      - "./postgresql-saypr:/var/lib/postgresql/data"
+    networks:
+      - saypr-network
+
+volumes:
+  postgresql-saypr:
+networks:
+  saypr-network:
+    driver: bridge
