@@ -25,10 +25,17 @@ class EmployeeRequest extends FormRequest
     {
         if ($this->method() === 'PATCH') {
             return [
+                'company_id' => 'int|nullable',
+                'first_name' => 'string|max:255',
+                'last_name' => 'string|max:255',
+                'email' => 'string|max:255|nullable'
             ];
         }
         return [
-
+            'company_id' => 'int|nullable',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'string|max:255|nullable',
         ];
     }
 }
